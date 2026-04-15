@@ -177,6 +177,7 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
               <p className="text-lg md:text-xl text-amber-900 font-medium">कार्तिक अग्रवाल, गणेश अग्रवाल</p>
               <p className="text-lg md:text-xl text-amber-900 font-medium">शिवम अग्रवाल, शरद अग्रवाल</p>
               <p className="text-lg md:text-xl text-amber-900 font-medium">हनी अग्रवाल, शिवा अग्रवाल</p>
+              <p className="text-lg md:text-xl text-amber-900 font-medium">अंकिता अग्रवाल</p>
               <p className="text-lg md:text-xl text-amber-900 font-bold mt-2">एवं समस्त अग्रवाल परिवार</p>
             </div>
 
@@ -202,6 +203,7 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
             {/* विनीत */}
             <div className="flex flex-col space-y-3">
               <h4 className="text-2xl md:text-3xl font-bold text-[#8b0000] mb-3">विनीत :</h4>
+              <p className="text-lg md:text-xl text-amber-900 font-medium">लक्ष्मण प्रसाद अग्रवाल</p>
               <p className="text-lg md:text-xl text-amber-900 font-medium">संजीव अग्रवाल-मिनिषा अग्रवाल</p>
               <p className="text-lg md:text-xl text-amber-900 font-medium">मनीष अग्रवाल</p>
               <p className="text-lg md:text-xl text-amber-900 font-medium">अमित अग्रवाल-चंचल अग्रवाल</p>
