@@ -19,7 +19,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
             className="absolute inset-0 flex flex-col items-center justify-center z-50 bg-cover bg-center bg-no-repeat"
             style={{ 
               // FIX: Removed the heavy red linear-gradient. Now it's just your pure image!
-              backgroundImage: `url('/intro.png')` 
+              backgroundImage: `url('../public/intro.png')` 
             }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
@@ -38,7 +38,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
               >
                 <div className="absolute inset-0 bg-amber-500 blur-[50px] opacity-30 rounded-full"></div>
                 <img 
-                  src="/GaneshJi.png" 
+                  src="../public/GaneshJi.png" 
                   alt="Ganesha" 
                   className="w-44 h-44 md:w-82 md:h-82 lg:w-86 lg:h-86 object-contain" 
                   style={{ filter: 'invert(80%) sepia(50%) saturate(1000%) hue-rotate(350deg) drop-shadow(0px 10px 15px rgba(0,0,0,0.6))' }} 

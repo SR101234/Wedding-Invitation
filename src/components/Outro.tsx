@@ -5,7 +5,7 @@ export default function Outro({ onRestart }: { onRestart: () => void }) {
     <motion.div
       // Removed the gradient background and added bg-cover, bg-center, bg-no-repeat
       className="absolute inset-0 flex flex-col items-center justify-center text-amber-200 z-40 bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url('/Outro.png')` }}
+      style={{ backgroundImage: `url('../public/Outro.png')` }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
