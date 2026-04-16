@@ -209,7 +209,7 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
                 <div className="space-y-6 mt-8 relative z-10">
                   <div className="flex justify-between items-center text-2xl">
                     <span className="text-amber-900">प्रातः बेला</span>
-                    <span className="font-bold text-[#8b0000] text-3xl">मीगी पलकें</span>
+                    <span className="font-bold text-[#8b0000] text-3xl">भीगी पलकें</span>
                   </div>
                 </div>
               </div>
