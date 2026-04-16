@@ -37,7 +37,11 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
     let animationFrameId: number;
     let isFinished = false; 
     
-    const scrollSpeed = 1.2; 
+    // Check screen width to determine if it's mobile (under 768px)
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    
+    // Base speed is 1.2. If mobile, multiply by 1.5 (which equals 1.8)
+    const scrollSpeed = isMobile ? 1.8 : 1.2; 
 
     const startScrolling = () => {
       const scroll = () => {
