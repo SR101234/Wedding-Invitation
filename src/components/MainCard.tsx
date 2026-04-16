@@ -37,18 +37,28 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
     let animationFrameId: number;
     let isFinished = false; 
     
-    // Check screen width to determine if it's mobile (under 768px)
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     
-    // Base speed is 1.2. If mobile, multiply by 1.5 (which equals 1.8)
-    const scrollSpeed = isMobile ? 1.8 : 1.2; 
+    // DELTA TIME FIX: Instead of pixels per frame, we use pixels per millisecond
+    // 0.11 px/ms is roughly equivalent to 1.8px per frame at 60fps.
+    const speedPerMs = isMobile ? 0.11 : 0.07; 
 
     const startScrolling = () => {
-      const scroll = () => {
+      let lastTime = performance.now();
+      let preciseScrollTop = container.scrollTop; // Track exact decimal position
+
+      const scroll = (currentTime: number) => {
         if (!container || isFinished) return;
 
+        // Calculate exactly how much time has passed since the last frame
+        const deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
         if (!isPausedRef.current) {
-          container.scrollTop += scrollSpeed;
+          // Multiply time passed by speed. If a frame drops, deltaTime is larger, 
+          // meaning it moves exactly the right amount to prevent a visual stutter.
+          preciseScrollTop += deltaTime * speedPerMs;
+          container.scrollTop = preciseScrollTop;
 
           if (container.scrollTop + container.clientHeight >= container.scrollHeight - 5) {
             isFinished = true;
@@ -89,7 +99,6 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 1.5 }}
     >
-      {/* 1. FIXED BACKGROUNDS: Keep these fixed to the screen so they don't stretch */}
       <div className="fixed inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] pointer-events-none z-0"></div>
       
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -99,17 +108,13 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
         <Mandala className="top-1/2 -left-48 w-80 h-80 -translate-y-1/2" />
       </div>
 
-      {/* 2. SCROLLING WRAPPER: This holds the border and the content together */}
       <div className="relative w-full min-h-screen">
         
-        {/* Decorative Borders - Changed to 'absolute' so they stretch perfectly around the scrolling content */}
         <div className="absolute top-4 bottom-4 left-4 right-4 md:top-6 md:bottom-6 md:left-6 md:right-6 border-[3px] border-amber-600/40 rounded-2xl pointer-events-none z-10 shadow-[inset_0_0_20px_rgba(217,119,6,0.2)]"></div>
         <div className="absolute top-6 bottom-6 left-6 right-6 md:top-8 md:bottom-8 md:left-8 md:right-8 border border-amber-500/30 rounded-xl pointer-events-none z-10"></div>
 
-        {/* Content Container - Added slight extra padding (py-28) to stay clear of the top border */}
         <div className="max-w-6xl mx-auto px-6 py-28 flex flex-col items-center text-center space-y-32 md:space-y-40 relative z-20">
           
-          {/* Section 1: Names */}
           <motion.section
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -170,13 +175,13 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
             </div>
           </motion.section>
 
-          {/* Section 2: Events */}
           <motion.section
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1 }}
-            className="w-full max-w-5xl bg-white/90 backdrop-blur-xl p-10 md:p-16 rounded-[3rem] shadow-[0_20px_50px_rgba(139,0,0,0.15)] border-[3px] border-amber-300 relative mx-auto"
+            // PERFORMANCE FIX: backdrop-blur-none on mobile, backdrop-blur-md on desktop. bg-white/95 ensures it still looks great without blur.
+            className="w-full max-w-5xl bg-white/95 md:bg-white/90 backdrop-blur-none md:backdrop-blur-md p-10 md:p-16 rounded-[3rem] shadow-[0_20px_50px_rgba(139,0,0,0.15)] border-[3px] border-amber-300 relative mx-auto"
           >
             <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#8b0000] via-[#a50000] to-[#8b0000] text-amber-100 px-12 py-4 rounded-full text-4xl md:text-5xl font-['Tiro_Devanagari_Hindi'] shadow-[0_10px_20px_rgba(139,0,0,0.4)] border-2 border-amber-400 whitespace-nowrap">
               मांगलिक कार्यक्रम
@@ -211,7 +216,6 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
             </div>
           </motion.section>
 
-          {/* Section 3: Venue */}
           <motion.section
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -224,7 +228,8 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
               <div className="h-1.5 w-full bg-gradient-to-r from-transparent via-amber-500 to-transparent rounded-full"></div>
             </div>
             
-            <div className="bg-white/80 backdrop-blur-md p-12 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-2 border-amber-300 max-w-3xl mx-auto relative overflow-hidden">
+            {/* PERFORMANCE FIX: Removed blur on mobile here as well */}
+            <div className="bg-white/95 md:bg-white/80 backdrop-blur-none md:backdrop-blur-md p-12 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-2 border-amber-300 max-w-3xl mx-auto relative overflow-hidden">
               <div className="absolute -left-10 -top-10 w-40 h-40 bg-amber-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
               <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-red-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
               
@@ -233,17 +238,16 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
             </div>
           </motion.section>
 
-          {/* Section 4: Family Details */}
           <motion.section
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1 }}
-            className="w-full font-['Tiro_Devanagari_Hindi'] relative bg-white/60 backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-amber-200 shadow-sm"
+            // PERFORMANCE FIX: Removed blur on mobile here as well
+            className="w-full font-['Tiro_Devanagari_Hindi'] relative bg-white/95 md:bg-white/60 backdrop-blur-none md:backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-amber-200 shadow-sm"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-6 text-center">
               
-              {/* दर्शनाभिलाषी */}
               <div className="flex flex-col space-y-3">
                 <h4 className="text-2xl md:text-3xl font-bold text-[#8b0000] mb-3">दर्शनाभिलाषी :</h4>
                 <p className="text-lg md:text-xl text-amber-900 font-medium">रजत अग्रवाल</p>
@@ -254,7 +258,6 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
                 <p className="text-lg md:text-xl text-amber-900 font-bold mt-2">एवं समस्त अग्रवाल परिवार</p>
               </div>
 
-              {/* स्वागतोत्सुक */}
               <div className="flex flex-col space-y-3">
                 <h4 className="text-2xl md:text-3xl font-bold text-[#8b0000] mb-3">स्वागतोत्सुक :</h4>
                 <p className="text-lg md:text-xl text-amber-900 font-medium">कुसुम अग्रवाल-ललित अग्रवाल</p>
@@ -265,7 +268,6 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
                 <p className="text-lg md:text-xl text-amber-900 font-medium">दिवांशी अग्रवाल, अंकिता अग्रवाल</p>
               </div>
 
-              {/* ननिहाल पक्ष */}
               <div className="flex flex-col space-y-3">
                 <h4 className="text-2xl md:text-3xl font-bold text-[#8b0000] mb-3">ननिहाल पक्ष :</h4>
                 <p className="text-lg md:text-xl text-amber-900 font-medium">(मामा-मामी)</p>
@@ -273,7 +275,6 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
                 <p className="text-lg md:text-xl text-amber-900 font-medium">नीरज-पूनम</p>
               </div>
 
-              {/* विनीत */}
               <div className="flex flex-col space-y-3">
                 <h4 className="text-2xl md:text-3xl font-bold text-[#8b0000] mb-3">विनीत :</h4>
                 <p className="text-lg md:text-xl text-amber-900 font-medium">लक्ष्मण प्रसाद अग्रवाल</p>
@@ -286,17 +287,6 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
 
             </div>
           </motion.section>
-
-          {/* Action Button */}
-          {/* <motion.button 
-            onClick={onFinish}
-            whileHover={{ scale: 1.05, boxShadow: "0px 15px 30px rgba(139, 0, 0, 0.4)" }}
-            whileTap={{ scale: 0.95 }}
-            className="mt-12 px-16 py-5 bg-gradient-to-r from-[#8b0000] via-[#a50000] to-[#8b0000] text-amber-100 rounded-full transition-all shadow-2xl text-2xl font-sans tracking-widest uppercase border-2 border-amber-400/50 relative overflow-hidden group"
-          >
-            <span className="relative z-10 font-bold">Bless the Couple</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-          </motion.button> */}
 
         </div>
       </div>
