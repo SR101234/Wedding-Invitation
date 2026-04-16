@@ -71,14 +71,14 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
                 </p>
               </div>
               
-              <motion.button
+              {/* <motion.button
                 onClick={handleOpen}
                 whileHover={{ scale: 1.05, boxShadow: "0px 0px 25px rgba(251, 191, 36, 0.4)" }}
                 whileTap={{ scale: 0.95 }}
                 className="px-10 py-3 border border-amber-400 rounded-full text-amber-50 bg-[#5c0000]/40 hover:bg-[#8b0000]/60 transition-all duration-300 font-serif tracking-[0.15em] uppercase text-sm md:text-base shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur-md cursor-pointer"
               >
                 Open Invitation
-              </motion.button>
+              </motion.button> */}
             </motion.div>
           </motion.div>
         )}

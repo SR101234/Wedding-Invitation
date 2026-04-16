@@ -284,7 +284,7 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
           </motion.section>
 
           {/* Action Button */}
-          <motion.button 
+          {/* <motion.button 
             onClick={onFinish}
             whileHover={{ scale: 1.05, boxShadow: "0px 15px 30px rgba(139, 0, 0, 0.4)" }}
             whileTap={{ scale: 0.95 }}
@@ -292,7 +292,7 @@ export default function MainCard({ onFinish }: { onFinish: () => void }) {
           >
             <span className="relative z-10 font-bold">Bless the Couple</span>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-          </motion.button>
+          </motion.button> */}
 
         </div>
       </div>
