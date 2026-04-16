@@ -1,15 +1,32 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function Intro({ onComplete }: { onComplete: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleOpen = () => {
+    // Clear the auto-timer if the user clicks manually
+    if (timerRef.current) clearTimeout(timerRef.current); 
+    
     setIsOpen(true);
     setTimeout(() => {
       onComplete();
     }, 2000); // Wait for curtains to open before unmounting
   };
+
+  // ADDED: Auto-open after 6 seconds
+  useEffect(() => {
+    timerRef.current = setTimeout(() => {
+      handleOpen();
+    }, 3000);
+
+    // Cleanup timer if component unmounts early
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="absolute inset-0 z-50 overflow-hidden bg-[#5c0000]">
@@ -17,20 +34,17 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
         {!isOpen && (
           <motion.div
             className="absolute inset-0 flex flex-col items-center justify-center z-50 bg-cover bg-center bg-no-repeat"
-            style={{ 
-              // FIX: Removed the heavy red linear-gradient. Now it's just your pure image!
-              backgroundImage: `url('/intro.png')` 
-            }}
+            style={{ backgroundImage: `url('/intro.png')` }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
+            {/* ... Rest of your Intro JSX remains exactly the same ... */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.5, ease: "easeOut" }}
               className="text-center relative z-50 flex flex-col items-center px-4 w-full"
             >
-              {/* Ganesha Image Container */}
               <motion.div
                 animate={{ rotate: [0, 3, -3, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
